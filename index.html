@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>JCEF JavaScript-Java交互</title>
+</head>
+<body>
+    <h1>JavaScript调用Java方法示例</h1>
+    
+    <button onclick="getCurrentTime()">获取Java当前时间</button>
+    <button onclick="javaAdd()">Java加法计算</button>
+    <button onclick="showJavaMessage()">显示Java消息框</button>
+    
+    <div id="result" style="margin-top:20px;padding:10px;border:1px solid #ccc;">等待调用...</div>
+
+    <script>
+        // JavaScript调用Java方法的核心函数
+        function callJavaMethod(request, callback) {
+            if (typeof window.cefQuery !== 'undefined') {
+                window.cefQuery({
+                    request: request,
+                    persistent: false,
+                    onSuccess: function(response) {
+                        callback(true, response);
+                    },
+                    onFailure: function(errorCode, errorMessage) {
+                        callback(false, "错误(" + errorCode + "): " + errorMessage);
+                    }
+                });
+            } else {
+                callback(false, "cefQuery未找到，请在JCEF环境中运行");
+            }
+        }
+
+        // 获取Java当前时间
+        function getCurrentTime() {
+            callJavaMethod('currentTime', function(success, response) {
+                document.getElementById('result').innerHTML = 
+                    success ? '✅ Java时间: ' + response : '❌ ' + response;
+            });
+        }
+
+        // Java加法计算 (10 + 20)
+        function javaAdd() {
+            callJavaMethod('add:10,20', function(success, response) {
+                document.getElementById('result').innerHTML = 
+                    success ? '✅ 10 + 20 = ' + response : '❌ ' + response;
+            });
+        }
+
+        // 显示Java消息框
+        function showJavaMessage() {
+            callJavaMethod('showMessage:Hello from JavaScript!', function(success, response) {
+                document.getElementById('result').innerHTML = 
+                    success ? '✅ ' + response : '❌ ' + response;
+            });
+        }
+    </script>
+</body>
+</html>
