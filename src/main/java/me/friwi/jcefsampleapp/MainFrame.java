@@ -179,6 +179,65 @@ public class MainFrame extends JFrame {
 			}
 		});
 
+		// 创建Java控制面板，用于调用JavaScript方法
+		JPanel controlPanel = new JPanel(new FlowLayout());
+
+		JButton jsTimeBtn = new JButton("调用JS显示时间");
+		jsTimeBtn.addActionListener(e -> {
+			String script = "document.getElementById('result').innerHTML = 'Java调用JS: ' + new Date().toLocaleString();";
+			browser_.executeJavaScript(script, null, 0);
+		});
+
+		JButton jsAlertBtn = new JButton("调用JS显示消息");
+		jsAlertBtn.addActionListener(e -> {
+			String script = "document.getElementById('result').innerHTML = 'Java调用JavaScript显示的消息: 你好！';"
+					+ "document.getElementById('result').style.backgroundColor = '#fff3cd';"
+					+ "document.getElementById('result').style.border = '2px solid #ffeaa7';";
+			browser_.executeJavaScript(script, null, 0);
+		});
+
+		JButton jsCalcBtn = new JButton("调用JS计算");
+		jsCalcBtn.addActionListener(e -> {
+			String script = "var result = 15 * 8; document.getElementById('result').innerHTML = 'Java调用JS计算 15 × 8 = ' + result;";
+			browser_.executeJavaScript(script, null, 0);
+		});
+
+		JButton jsColorBtn = new JButton("改变JS页面颜色");
+		jsColorBtn.addActionListener(e -> {
+			String script = "document.body.style.backgroundColor = '#e6f3ff'; document.getElementById('result').innerHTML = 'Java已改变页面背景色';";
+			browser_.executeJavaScript(script, null, 0);
+		});
+
+		JButton jsWelcomeBtn = new JButton("调用JS欢迎方法");
+		jsWelcomeBtn.addActionListener(e -> {
+			browser_.executeJavaScript("showWelcome();", null, 0);
+		});
+
+		JButton jsComplexBtn = new JButton("调用JS复杂计算");
+		jsComplexBtn.addActionListener(e -> {
+			String script = "var result = complexCalculation(3, 4); document.getElementById('result').innerHTML = 'Java调用JS计算√(3²+4²) = ' + result;";
+			browser_.executeJavaScript(script, null, 0);
+		});
+
+		JButton jsDynamicBtn = new JButton("调用JS创建内容");
+		jsDynamicBtn.addActionListener(e -> {
+			browser_.executeJavaScript("createDynamicContent();", null, 0);
+		});
+
+		JButton jsClearBtn = new JButton("调用JS清空结果");
+		jsClearBtn.addActionListener(e -> {
+			browser_.executeJavaScript("clearResult();", null, 0);
+		});
+
+		controlPanel.add(jsTimeBtn);
+		controlPanel.add(jsAlertBtn);
+		controlPanel.add(jsCalcBtn);
+		controlPanel.add(jsColorBtn);
+		controlPanel.add(jsWelcomeBtn);
+		controlPanel.add(jsComplexBtn);
+		controlPanel.add(jsDynamicBtn);
+		controlPanel.add(jsClearBtn);
+
 		// Update the address field when the browser URL changes.
 		client_.addDisplayHandler(new CefDisplayHandlerAdapter() {
 			@Override
@@ -218,10 +277,14 @@ public class MainFrame extends JFrame {
 
 		// (6) All UI components are assigned to the default content pane of this
 		// JFrame and afterwards the frame is made visible to the user.
-		getContentPane().add(address_, BorderLayout.NORTH);
+		JPanel topPanel = new JPanel(new BorderLayout());
+		topPanel.add(address_, BorderLayout.CENTER);
+		topPanel.add(controlPanel, BorderLayout.SOUTH);
+
+		getContentPane().add(topPanel, BorderLayout.NORTH);
 		getContentPane().add(browerUI_, BorderLayout.CENTER);
 		pack();
-		setSize(800, 600);
+		setSize(800, 650);
 		setVisible(true);
 
 		// (7) To take care of shutting down CEF accordingly, it's important to call

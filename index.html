@@ -55,6 +55,41 @@
                     success ? '✅ ' + response : '❌ ' + response;
             });
         }
+
+        // ========== Java可以调用的JavaScript方法 ==========
+        
+        // Java调用的方法：显示欢迎信息
+        function showWelcome() {
+            document.getElementById('result').innerHTML = '🎉 欢迎使用JCEF双向交互！';
+        }
+        
+        // Java调用的方法：复杂计算
+        function complexCalculation(a, b) {
+            var result = Math.pow(a, 2) + Math.pow(b, 2);
+            return Math.sqrt(result);
+        }
+        
+        // Java调用的方法：创建动态内容
+        function createDynamicContent() {
+            var content = '<div style="background:#f0f8ff;padding:10px;margin:10px;border-radius:5px;">';
+            content += '<h3>Java动态创建的内容</h3>';
+            content += '<p>创建时间: ' + new Date().toLocaleString() + '</p>';
+            content += '<p>随机数: ' + Math.floor(Math.random() * 1000) + '</p>';
+            content += '</div>';
+            document.body.innerHTML += content;
+        }
+        
+        // Java调用的方法：清空结果
+        function clearResult() {
+            document.getElementById('result').innerHTML = '结果已清空';
+        }
+        
+        // 页面加载完成提示
+        window.onload = function() {
+            console.log('HTML页面加载完成，Java可以通过browser.executeJavaScript()调用JavaScript方法');
+            // 显示加载完成消息
+            document.getElementById('result').innerHTML = '✅ 页面加载完成，双向交互已就绪';
+        };
     </script>
 </body>
 </html>
